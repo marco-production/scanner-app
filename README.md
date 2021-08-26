@@ -1,6 +1,6 @@
-# scanner
+# Scanner App
 
-QR Scannner with SQLite
+QR Scanner with SQLite
 
 ## Getting Started
 
