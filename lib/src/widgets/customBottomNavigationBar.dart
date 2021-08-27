@@ -20,11 +20,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.map_outlined),
-              label: 'Map',
+              label: 'Maps',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.wifi),
-              label: 'Direction'
+              label: 'Directions'
           ),
         ]
     );

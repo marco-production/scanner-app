@@ -110,4 +110,31 @@ class DBProvider {
 
     return getScanners.isNotEmpty ? List<Scanner>.from(getScanners.map((e) => Scanner.fromMap(e))) : [];
   }
+
+  ///* UPDATE DATOS *///
+  Future<int> UpdateScannerById(Scanner scanner) async {
+
+    final db = await database;
+    final getScanner = await db.update('scanners', scanner.toJson() , where: 'id = ?', whereArgs: [scanner.id]);
+
+    return getScanner;
+  }
+
+  ///* DELETE DATOS *///
+
+  ///Eliminar todos los registros
+  Future<int> DeleteScanners() async {
+
+    final db = await database;
+    final res = db.delete('scanners');
+    return res;
+  }
+
+  ///Eliminar todos los registros
+  Future<int> DeleteScannerById( int id) async {
+
+    final db = await database;
+    final res = db.delete('scanners', where: 'id = ?', whereArgs: [id]);
+    return res;
+  }
 }

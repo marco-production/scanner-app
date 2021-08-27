@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scanner/src/providers/menuProvider.dart';
+import 'package:scanner/src/providers/scannerProvider.dart';
 import 'package:scanner/src/screens/homeScreen.dart';
 
 void main() {
@@ -13,7 +14,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => MenuProvider())
+        ChangeNotifierProvider(create: (_) => MenuProvider()),
+        ChangeNotifierProvider(create: (_) => ScannerProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

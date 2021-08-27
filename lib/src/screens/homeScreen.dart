@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scanner/src/app/models/scanner.dart';
 import 'package:scanner/src/pages/directionPage.dart';
 import 'package:scanner/src/pages/mapPage.dart';
-import 'package:scanner/src/providers/dbProvider.dart';
 import 'package:scanner/src/providers/menuProvider.dart';
+import 'package:scanner/src/providers/scannerProvider.dart';
 import 'package:scanner/src/widgets/customBottomNavigationBar.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
@@ -13,14 +12,18 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final menuProvider = Provider.of<MenuProvider>(context);
+    final scannerProvider = Provider.of<ScannerProvider>(context, listen: false);
+
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Screen'),
+        title: Text(menuProvider.currentMenuTitle),
         actions: [
           IconButton(
               icon: Icon(Icons.restore_from_trash),
-              onPressed: (){})
+              onPressed: () => scannerProvider.deleteScanners())
         ],
       ),
 
@@ -31,16 +34,42 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         child: Icon(Icons.qr_code_sharp),
         onPressed: () async {
+
           String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
               '#FFFFFF',
               'Cancel',
               false,
               ScanMode.DEFAULT);
-
+          
+          if (!barcodeScanRes.contains('http') && !barcodeScanRes.contains('geo:')) {
+            _showAlert(context);
+          } else {
+            menuProvider.currentMenuIndex = barcodeScanRes.contains('http') ? 1 : 0;
+            scannerProvider.addScanner(barcodeScanRes);
+          }
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  void _showAlert(BuildContext context)
+  {
+       showDialog(
+          context: context,
+          builder: (BuildContext builder){
+            return AlertDialog(
+              title: Row(children: <Widget>[
+                Icon(Icons.error_outline, color: Colors.red),
+                SizedBox(width: 5,),
+                Text('Error'),
+              ],),
+              content: Text("QR code isn't valid."),
+              actions: <Widget>[
+                TextButton(onPressed: ()=> Navigator.of(context).pop(), child: Text('Close'))
+              ],
+          );
+      });
   }
 }
 
@@ -52,45 +81,31 @@ class CurrentPage extends StatelessWidget {
     // TODO: implement build
 
     final menuProvider = Provider.of<MenuProvider>(context);
+    final scannerProvider = Provider.of<ScannerProvider>(context);
 
     int currentPageIndex = menuProvider.currentMenuIndex;
-
-    //final scanner = Scanner(value: "https://www.youtube.com/");
-    //DBProvider.db.insertScanner(scanner);
-    //DBProvider.db.getScannerById(8).then((value) => value != null ? print(value.value) : print('El Id no coincide con los registros.'));
-    final list = DBProvider.db.getScanners().then((value) => {
-
-      value.forEach((element) {
-        print(element.value);
-      })
-
-    });
 
     switch(currentPageIndex){
 
       case 0:
-        return MapPage();
+
+        scannerProvider.scannerListByType('location');
+        final scanners = scannerProvider.scanners;
+        return MapPage(scanners: scanners);
 
       case 1:
-        return DirectionPage();
+
+        scannerProvider.scannerListByType('url');
+        final scanners = scannerProvider.scanners;
+        return DirectionPage(scanners: scanners);
 
       default:
-        return MapPage();
+
+        scannerProvider.scannerListByType('location');
+        final scanners = scannerProvider.scanners;
+        return MapPage(scanners: scanners);
     }
 
   }
 }
-
-class _HomeScreen extends StatelessWidget {
-  _HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Center(
-      child: Text('Home Screen'),
-    );
-  }
-}
-
 
