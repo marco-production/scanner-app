@@ -48,10 +48,8 @@ class ScannerProvider extends ChangeNotifier {
 
   deleteScannerById(int id) async
   {
-    final deleteScanner = await DBProvider.db.DeleteScannerById(id);
-
-    scanners.removeWhere((element) => element.id == deleteScanner);
-    notifyListeners();
+    scanners.removeWhere((element) => element.id == id);
+    await DBProvider.db.DeleteScannerById(id);
   }
 
 }
