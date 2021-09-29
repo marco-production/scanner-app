@@ -3,6 +3,8 @@
    <application
         android:label="scanner"
         android:icon="@mipmap/ic_launcher">
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyBeik9Fo3LW3t7VTMblyKEsj2vZgHLs-lg"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -38,4 +40,11 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <queries>
+        <!-- If your app opens https URLs -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
 </manifest>

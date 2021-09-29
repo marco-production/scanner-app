@@ -25,7 +25,7 @@ class ScannerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  addScanner(String value) async
+  Future<Scanner> addScanner(String value) async
   {
     final scanner = Scanner(value: value);
     final addScanner = await DBProvider.db.insertScanner(scanner);
@@ -36,6 +36,8 @@ class ScannerProvider extends ChangeNotifier {
       this.scanners.add(scanner);
       notifyListeners();
     }
+
+    return scanner;
   }
 
   deleteScanners() async

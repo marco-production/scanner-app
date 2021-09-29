@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:scanner/src/providers/menuProvider.dart';
 import 'package:scanner/src/providers/scannerProvider.dart';
 import 'package:scanner/src/screens/homeScreen.dart';
+import 'package:scanner/src/screens/mapScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
 
         routes: {
           '/home': (BuildContext context) => HomeScreen(),
+          '/map': (BuildContext context) => MapScreen(),
         },
       ),
     );
